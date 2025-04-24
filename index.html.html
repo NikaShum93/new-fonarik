@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background-color: black;
+      cursor: none;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle 100px at var(--x, 50%) var(--y, 50%), transparent 0%, rgba(0,0,0,0.95) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .label {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 14px;
+      padding: 6px 12px;
+      border-radius: 12px;
+      z-index: 3;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 0 4px rgba(255,255,255,0.2);
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay" id="overlay"></div>
+  <div class="label" id="label">🔦 Фонарик by Nika Shum</div>
+
+  <script>
+    const overlay = document.getElementById("overlay");
+    const label = document.getElementById("label");
+
+    document.addEventListener("mousemove", e => {
+      document.documentElement.style.setProperty('--x', `${e.clientX}px`);
+      document.documentElement.style.setProperty('--y', `${e.clientY}px`);
+    });
+
+    // Показываем подпись, только если в редакторе Genially (iframe внутри редактора)
+    if (window.top !== window.self) {
+      label.style.display = "block";
+    }
+  </script>
+</body>
+</html>
