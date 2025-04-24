@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Фонарик Genially (внутри сцены)</title>
+  <title>Фонарик Genially</title>
   <style>
     html, body {
       margin: 0;
@@ -76,8 +76,8 @@
       darkness.style.setProperty('--y', `${y}px`);
     });
 
-    // Показываем подпись только в редакторе Genially
-    if (document.referrer.includes("genial.ly/editor")) {
+    // Проверка: находимся ли мы в редакторе Genially (в iframe)
+    if (window.top !== window.self) {
       document.getElementById("info").style.display = "block";
     }
   </script>
