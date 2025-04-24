@@ -1,28 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <title>Фонарик Genially (внутри сцены)</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: transparent;
       overflow: hidden;
-      background-color: black;
-      cursor: none;
     }
 
-    .overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
+    #scene-container {
+      position: relative;
+      width: 1280px;
+      height: 720px;
+      background: transparent;
+    }
+
+    #darkness {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1280px;
+      height: 720px;
       pointer-events: none;
-      z-index: 2;
-      --x: 50%;
-      --y: 50%;
-      background: radial-gradient(circle 100px at var(--x) var(--y), transparent 0%, rgba(0,0,0,0.95) 100%);
+      z-index: 999;
+      background-color: rgba(0, 0, 0, 0.98);
+      --x: 640px;
+      --y: 360px;
+
+      -webkit-mask-image: radial-gradient(circle 100px at var(--x) var(--y), transparent 0%, black 100%);
+      -webkit-mask-repeat: no-repeat;
+      mask-image: radial-gradient(circle 100px at var(--x) var(--y), transparent 0%, black 100%);
+      mask-repeat: no-repeat;
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
     }
 
     .label {
@@ -35,7 +52,7 @@
       font-size: 14px;
       padding: 6px 12px;
       border-radius: 12px;
-      z-index: 3;
+      z-index: 1000;
       backdrop-filter: blur(4px);
       box-shadow: 0 0 4px rgba(255,255,255,0.2);
       display: none;
@@ -43,21 +60,26 @@
   </style>
 </head>
 <body>
-  <div class="overlay" id="overlay"></div>
-  <div class="label" id="label">🔦 Фонарик by Nika Shum</div>
+  <div id="scene-container">
+    <div id="darkness"></div>
+    <div class="label" id="label">🔦 Фонарик by Nika Shum</div>
+  </div>
 
   <script>
-    const overlay = document.getElementById("overlay");
+    const darkness = document.getElementById("darkness");
+    const container = document.getElementById("scene-container");
     const label = document.getElementById("label");
 
-    document.addEventListener("mousemove", (e) => {
-      const x = e.clientX + "px";
-      const y = e.clientY + "px";
-      overlay.style.setProperty("--x", x);
-      overlay.style.setProperty("--y", y);
+    container.addEventListener("mousemove", (e) => {
+      const rect = container.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      darkness.style.setProperty('--x', `${x}px`);
+      darkness.style.setProperty('--y', `${y}px`);
     });
 
-    // Показываем надпись только в редакторе Genially
+    // Показывать плашку только в режиме редактирования Genially
     if (window.top !== window.self) {
       label.style.display = "block";
     }
