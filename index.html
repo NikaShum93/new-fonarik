@@ -20,6 +20,7 @@
       width: 1280px;
       height: 720px;
       background: transparent;
+      cursor: none; /* Скрываем курсор */
     }
 
     #darkness {
@@ -44,8 +45,8 @@
 
     .label {
       position: absolute;
-      top: 10px;
-      left: 10px;
+      top: 40px;
+      left: 40px;
       background: rgba(0, 0, 0, 0.6);
       color: white;
       font-family: 'Segoe UI', sans-serif;
@@ -79,7 +80,7 @@
       darkness.style.setProperty('--y', `${y}px`);
     });
 
-    // Показывать плашку только в режиме редактирования Genially
+    // Показывать плашку только в редакторе Genially
     if (window.top !== window.self) {
       label.style.display = "block";
     }
