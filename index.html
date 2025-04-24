@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,9 +18,11 @@
       top: 0; left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle 100px at var(--x, 50%) var(--y, 50%), transparent 0%, rgba(0,0,0,0.95) 100%);
       pointer-events: none;
       z-index: 2;
+      --x: 50%;
+      --y: 50%;
+      background: radial-gradient(circle 100px at var(--x) var(--y), transparent 0%, rgba(0,0,0,0.95) 100%);
     }
 
     .label {
@@ -49,12 +50,14 @@
     const overlay = document.getElementById("overlay");
     const label = document.getElementById("label");
 
-    document.addEventListener("mousemove", e => {
-      document.documentElement.style.setProperty('--x', `${e.clientX}px`);
-      document.documentElement.style.setProperty('--y', `${e.clientY}px`);
+    document.addEventListener("mousemove", (e) => {
+      const x = e.clientX + "px";
+      const y = e.clientY + "px";
+      overlay.style.setProperty("--x", x);
+      overlay.style.setProperty("--y", y);
     });
 
-    // Показываем подпись, только если в редакторе Genially (iframe внутри редактора)
+    // Показываем надпись только в редакторе Genially
     if (window.top !== window.self) {
       label.style.display = "block";
     }
