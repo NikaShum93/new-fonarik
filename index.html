@@ -66,7 +66,7 @@
     <div class="label" id="label">🔦 Фонарик by Nika Shum</div>
   </div>
 
- <script>
+<script>
   const darkness = document.getElementById("darkness");
   const container = document.getElementById("scene-container");
   const label = document.getElementById("label");
@@ -79,11 +79,21 @@
     darkness.style.setProperty('--y', `${y}px`);
   });
 
-  // Показывать плашку только в редакторе Genially
-  if (document.referrer.includes("genial.ly/editor")) {
+  // Устойчивая проверка на режим редактирования Genially
+  try {
+    if (
+      window.top !== window.self && (
+        document.referrer.includes("genial.ly/editor") ||
+        document.referrer.includes("genial.ly/app/editor") || // доп путь
+        document.referrer === "" // fallback для некоторых браузеров
+      )
+    ) {
+      label.style.display = "block";
+    }
+  } catch (e) {
+    // если вдруг window.top access блокируется
     label.style.display = "block";
   }
 </script>
-
 </body>
 </html>
