@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Фонарик Genially</title>
+  <title>Фонарик by Nika Shum</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
   <style>
     html, body {
       margin: 0;
@@ -44,23 +45,27 @@
 
     #info {
       position: absolute;
-      top: 10px;
-      left: 10px;
-      padding: 6px 12px;
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-      font-size: 14px;
-      font-family: sans-serif;
-      border-radius: 8px;
+      top: 12px;
+      left: 12px;
+      padding: 6px 14px;
+      background: rgba(25, 10, 40, 0.75);
+      backdrop-filter: blur(4px);
+      color: #f0eaff;
+      font-size: 13px;
+      font-family: 'Comfortaa', cursive;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      box-shadow: 0 0 6px rgba(200, 160, 255, 0.15);
       z-index: 1000;
       display: none;
+      transition: opacity 0.3s ease;
     }
   </style>
 </head>
 <body>
   <div id="scene-container">
     <div id="darkness"></div>
-    <div id="info">Фонарик by Nika Shum</div>
+    <div id="info">🔮 Фонарик by <strong>Nika Shum</strong></div>
   </div>
 
   <script>
@@ -76,7 +81,7 @@
       darkness.style.setProperty('--y', `${y}px`);
     });
 
-    // Проверка: находимся ли мы в редакторе Genially (в iframe)
+    // Показываем плашку только в редакторе (если внутри iframe)
     if (window.top !== window.self) {
       document.getElementById("info").style.display = "block";
     }
