@@ -66,24 +66,24 @@
     <div class="label" id="label">🔦 Фонарик by Nika Shum</div>
   </div>
 
-  <script>
-    const darkness = document.getElementById("darkness");
-    const container = document.getElementById("scene-container");
-    const label = document.getElementById("label");
+ <script>
+  const darkness = document.getElementById("darkness");
+  const container = document.getElementById("scene-container");
+  const label = document.getElementById("label");
 
-    container.addEventListener("mousemove", (e) => {
-      const rect = container.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+  container.addEventListener("mousemove", (e) => {
+    const rect = container.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    darkness.style.setProperty('--x', `${x}px`);
+    darkness.style.setProperty('--y', `${y}px`);
+  });
 
-      darkness.style.setProperty('--x', `${x}px`);
-      darkness.style.setProperty('--y', `${y}px`);
-    });
+  // Показывать плашку только в редакторе Genially
+  if (document.referrer.includes("genial.ly/editor")) {
+    label.style.display = "block";
+  }
+</script>
 
-    // Показывать плашку только в редакторе Genially
-    if (window.top !== window.self) {
-      label.style.display = "block";
-    }
-  </script>
 </body>
 </html>
