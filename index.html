@@ -2,98 +2,81 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Фонарик Genially (внутри сцены)</title>
+  <title>Фонарик by Nika Shum</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: transparent;
       overflow: hidden;
+      height: 100%;
+      background: black;
+      cursor: none;
     }
 
-    #scene-container {
-      position: relative;
-      width: 1280px;
-      height: 720px;
-      background: transparent;
-      cursor: none; /* Скрываем курсор */
-    }
-
-    #darkness {
+    #overlay {
       position: absolute;
       top: 0;
       left: 0;
-      width: 1280px;
-      height: 720px;
+      width: 100vw;
+      height: 100vh;
       pointer-events: none;
-      z-index: 999;
-      background-color: rgba(0, 0, 0, 0.98);
-      --x: 640px;
-      --y: 360px;
-
-      -webkit-mask-image: radial-gradient(circle 100px at var(--x) var(--y), transparent 0%, black 100%);
-      -webkit-mask-repeat: no-repeat;
-      mask-image: radial-gradient(circle 100px at var(--x) var(--y), transparent 0%, black 100%);
-      mask-repeat: no-repeat;
-      -webkit-mask-composite: destination-out;
-      mask-composite: exclude;
     }
 
-    .label {
+    #info {
       position: absolute;
-      top: 40px;
-      left: 40px;
-      background: rgba(0, 0, 0, 0.6);
+      top: 10px;
+      left: 10px;
+      padding: 8px 12px;
+      background: rgba(0, 0, 0, 0.5);
       color: white;
-      font-family: 'Segoe UI', sans-serif;
       font-size: 14px;
-      padding: 6px 12px;
-      border-radius: 12px;
-      z-index: 1000;
-      backdrop-filter: blur(4px);
-      box-shadow: 0 0 4px rgba(255,255,255,0.2);
+      font-family: sans-serif;
+      border-radius: 10px;
+      z-index: 9999;
       display: none;
     }
   </style>
 </head>
 <body>
-  <div id="scene-container">
-    <div id="darkness"></div>
-    <div class="label" id="label">🔦 Фонарик by Nika Shum</div>
-  </div>
+  <canvas id="overlay"></canvas>
+  <div id="info">Фонарик by Nika Shum</div>
 
-<script>
-  const darkness = document.getElementById("darkness");
-  const container = document.getElementById("scene-container");
-  const label = document.getElementById("label");
+  <script>
+    const canvas = document.getElementById('overlay');
+    const ctx = canvas.getContext('2d');
 
-  container.addEventListener("mousemove", (e) => {
-    const rect = container.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    darkness.style.setProperty('--x', `${x}px`);
-    darkness.style.setProperty('--y', `${y}px`);
-  });
-
-  // Устойчивая проверка на режим редактирования Genially
-  try {
-    if (
-      window.top !== window.self && (
-        document.referrer.includes("genial.ly/editor") ||
-        document.referrer.includes("genial.ly/app/editor") || // доп путь
-        document.referrer === "" // fallback для некоторых браузеров
-      )
-    ) {
-      label.style.display = "block";
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     }
-  } catch (e) {
-    // если вдруг window.top access блокируется
-    label.style.display = "block";
-  }
-</script>
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    document.addEventListener('mousemove', function(e) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const radius = 100;
+      const x = e.clientX;
+      const y = e.clientY;
+
+      const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+      gradient.addColorStop(0, 'transparent');
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0.85)');
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalCompositeOperation = 'source-over';
+    });
+
+    // Показываем инфо-плашку только в редакторе Genially
+    if (window.self !== window.top) {
+      document.getElementById('info').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
