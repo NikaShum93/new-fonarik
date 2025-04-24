@@ -73,8 +73,8 @@
       ctx.globalCompositeOperation = 'source-over';
     });
 
-    // Показываем инфо-плашку только в редакторе Genially
-    if (window.self !== window.top) {
+    // Показываем плашку, если мы в редакторе Genially (по URL-рефереру)
+    if (document.referrer.includes("genial.ly/editor")) {
       document.getElementById('info').style.display = 'block';
     }
   </script>
