@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>Фонарик by Nika Shum</title>
+  <title>new-fonarik</title>
   <style>
     html, body {
       margin: 0;
@@ -14,6 +14,7 @@
     }
 
     canvas {
+      display: block;
       position: absolute;
       top: 0;
       left: 0;
@@ -38,19 +39,21 @@
   <div id="label">Фонарик by Nika Shum</div>
 
   <script>
-    // Скрываем плашку в режиме просмотра (встроенный iframe)
-    if (window.self !== window.top) {
-      document.getElementById('label').style.display = 'none';
-    }
-
     const canvas = document.getElementById('flashlight');
     const ctx = canvas.getContext('2d');
     let mouseX = -1000, mouseY = -1000;
-    let radius = 100;
+    const radius = 100;
+
+    // Проверка режима редактора
+    const isEditor = document.referrer.includes('genial.ly/editor') || window.location !== window.parent.location;
+    if (!isEditor) {
+      document.getElementById('label').style.display = 'none';
+    }
 
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      drawFlashlight();
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
@@ -73,12 +76,10 @@
       gradient.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = gradient;
       ctx.beginPath();
-      ctx.arc(mouseX, mouseY, radius, 0, Math.PI * 2, true);
+      ctx.arc(mouseX, mouseY, radius, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
-
-    drawFlashlight();
   </script>
 </body>
 </html>
