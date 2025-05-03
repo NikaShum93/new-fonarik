@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>new-fonarik</title>
   <style>
     html, body {
@@ -9,7 +9,7 @@
       padding: 0;
       overflow: hidden;
       height: 100%;
-      background: black;
+      background: transparent; /* Прозрачный фон! */
       cursor: none;
     }
 
@@ -41,10 +41,10 @@
   <script>
     const canvas = document.getElementById('flashlight');
     const ctx = canvas.getContext('2d');
-    let mouseX = -1000, mouseY = -1000;
+    let mouseX = -500, mouseY = -500;
     const radius = 100;
 
-    // Проверка режима редактора
+    // Показывать подпись только в редакторе Genially
     const isEditor = document.referrer.includes('genial.ly/editor') || window.location !== window.parent.location;
     if (!isEditor) {
       document.getElementById('label').style.display = 'none';
@@ -55,6 +55,7 @@
       canvas.height = window.innerHeight;
       drawFlashlight();
     }
+
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
@@ -66,9 +67,12 @@
 
     function drawFlashlight() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "rgba(0, 0, 0, 0.9)";
+
+      // Чёрная маска поверх (почти непрозрачная)
+      ctx.fillStyle = "rgba(0, 0, 0, 0.96)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+      // Прозрачное "окно" под курсором
       ctx.save();
       ctx.globalCompositeOperation = 'destination-out';
       const gradient = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, radius);
