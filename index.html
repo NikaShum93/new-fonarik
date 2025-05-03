@@ -9,7 +9,7 @@
       padding: 0;
       overflow: hidden;
       height: 100%;
-      background: transparent; /* Прозрачный фон! */
+      background: transparent;
       cursor: none;
     }
 
@@ -31,6 +31,7 @@
       font-family: sans-serif;
       font-size: 14px;
       z-index: 10;
+      display: none; /* Скрыто по умолчанию */
     }
   </style>
 </head>
@@ -44,10 +45,10 @@
     let mouseX = -500, mouseY = -500;
     const radius = 100;
 
-    // Показывать подпись только в редакторе Genially
-    const isEditor = document.referrer.includes('genial.ly/editor') || window.location !== window.parent.location;
-    if (!isEditor) {
-      document.getElementById('label').style.display = 'none';
+    // Точная проверка режима редактора Genially
+    const isEditor = document.referrer.includes('genial.ly/editor');
+    if (isEditor) {
+      document.getElementById('label').style.display = 'block';
     }
 
     function resizeCanvas() {
@@ -68,11 +69,11 @@
     function drawFlashlight() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Чёрная маска поверх (почти непрозрачная)
-      ctx.fillStyle = "rgba(0, 0, 0, 0.96)";
+      // Чёрная маска почти полностью непрозрачная (98%)
+      ctx.fillStyle = "rgba(0, 0, 0, 0.98)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Прозрачное "окно" под курсором
+      // "Свет" вырезает прозрачность
       ctx.save();
       ctx.globalCompositeOperation = 'destination-out';
       const gradient = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, radius);
