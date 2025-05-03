@@ -1,90 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Фонарик by Nika Shum</title>
-  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: transparent;
       overflow: hidden;
+      height: 100%;
+      background: black;
+      cursor: none;
     }
 
-    #scene-container {
-      position: relative;
-      width: 1280px;
-      height: 720px;
-      background: transparent;
-    }
-
-    #darkness {
+    canvas {
       position: absolute;
       top: 0;
       left: 0;
-      width: 1280px;
-      height: 720px;
-      pointer-events: none;
-      z-index: 999;
-      background-color: rgba(0, 0, 0, 0.98);
-      --x: 640px;
-      --y: 360px;
-
-      -webkit-mask-image: radial-gradient(circle 100px at var(--x) var(--y), transparent 0%, black 100%);
-      -webkit-mask-repeat: no-repeat;
-      mask-image: radial-gradient(circle 100px at var(--x) var(--y), transparent 0%, black 100%);
-      mask-repeat: no-repeat;
-      -webkit-mask-composite: destination-out;
-      mask-composite: exclude;
     }
 
-    #info {
+    #label {
       position: absolute;
-      top: 12px;
-      left: 12px;
-      padding: 6px 14px;
-      background: rgba(25, 10, 40, 0.75);
-      backdrop-filter: blur(4px);
-      color: #f0eaff;
-      font-size: 13px;
-      font-family: 'Comfortaa', cursive;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      box-shadow: 0 0 6px rgba(200, 160, 255, 0.15);
-      z-index: 1000;
-      display: none;
-      transition: opacity 0.3s ease;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-family: sans-serif;
+      font-size: 14px;
+      z-index: 10;
     }
   </style>
 </head>
 <body>
-  <div id="scene-container">
-    <div id="darkness"></div>
-    <div id="info">🔮 Фонарик by <strong>Nika Shum</strong></div>
-  </div>
+  <canvas id="flashlight"></canvas>
+  <div id="label">Фонарик by Nika Shum</div>
 
   <script>
-    const darkness = document.getElementById("darkness");
-    const container = document.getElementById("scene-container");
+    // Скрываем плашку в режиме просмотра (встроенный iframe)
+    if (window.self !== window.top) {
+      document.getElementById('label').style.display = 'none';
+    }
 
-    container.addEventListener("mousemove", (e) => {
-      const rect = container.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+    const canvas = document.getElementById('flashlight');
+    const ctx = canvas.getContext('2d');
+    let mouseX = -1000, mouseY = -1000;
+    let radius = 100;
 
-      darkness.style.setProperty('--x', `${x}px`);
-      darkness.style.setProperty('--y', `${y}px`);
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      drawFlashlight();
     });
 
-    // Показываем плашку только в редакторе (если внутри iframe)
-    if (window.top !== window.self) {
-      document.getElementById("info").style.display = "block";
+    function drawFlashlight() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "rgba(0, 0, 0, 0.9)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-out';
+      const gradient = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, radius);
+      gradient.addColorStop(0, 'rgba(0,0,0,1)');
+      gradient.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(mouseX, mouseY, radius, 0, Math.PI * 2, true);
+      ctx.fill();
+      ctx.restore();
     }
+
+    drawFlashlight();
   </script>
 </body>
 </html>
