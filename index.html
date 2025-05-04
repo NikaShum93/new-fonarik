@@ -31,7 +31,7 @@
       font-family: sans-serif;
       font-size: 14px;
       z-index: 10;
-      display: none; /* Скрыто по умолчанию */
+      display: none; /* Скрыта по умолчанию */
     }
   </style>
 </head>
@@ -45,8 +45,9 @@
     let mouseX = -500, mouseY = -500;
     const radius = 100;
 
-    // Точная проверка режима редактора Genially
-    const isEditor = document.referrer.includes('genial.ly/editor');
+    // Проверка режима редактирования
+    const ref = document.referrer;
+    const isEditor = ref.includes('genial.ly/editor') || ref === '' || window.location.href.includes('localhost');
     if (isEditor) {
       document.getElementById('label').style.display = 'block';
     }
@@ -69,11 +70,11 @@
     function drawFlashlight() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Чёрная маска почти полностью непрозрачная (98%)
+      // Тёмная маска поверх
       ctx.fillStyle = "rgba(0, 0, 0, 0.98)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // "Свет" вырезает прозрачность
+      // Прозрачное "светлое" окно под курсором
       ctx.save();
       ctx.globalCompositeOperation = 'destination-out';
       const gradient = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, radius);
